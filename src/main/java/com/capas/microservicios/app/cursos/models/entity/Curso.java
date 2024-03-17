@@ -1,12 +1,18 @@
 package com.capas.microservicios.app.cursos.models.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.capas.microservicios.commons.alumnos.models.entity.Alumno;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -26,11 +32,19 @@ public class Curso {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createAt;
 
+	@OneToMany(fetch = FetchType.LAZY)
+	private List<Alumno> alumnos;
+	
 	@PrePersist
 	public void prePersist() {
 		this.createAt = new Date(); 
 	}
 	
+	public Curso() {
+		this.alumnos = new ArrayList<>();
+
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -53,6 +67,22 @@ public class Curso {
 
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
+	}
+
+	public List<Alumno> getAlumnos() {
+		return alumnos;
+	}
+
+	public void setAlumnos(List<Alumno> alumnos) {
+		this.alumnos = alumnos;
+	}
+
+	public void addAlumno(Alumno alumno) {
+		this.alumnos.add(alumno);
+	}
+	
+	public void removeAlumno(Alumno alumno) {
+		this.alumnos.remove(alumno);
 	}
 	
 }
